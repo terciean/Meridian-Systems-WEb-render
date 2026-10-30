@@ -3,6 +3,7 @@ import { PathwaysSection } from '@/components/home/PathwaysSection';
 import { ConnectedSection } from '@/components/home/ConnectedSection';
 import { ProcessSection } from '@/components/home/ProcessSection';
 import { ProofSection } from '@/components/home/ProofSection';
+import { SkillShowcaseSection } from '@/components/home/SkillShowcaseSection';
 import { ClosingCta } from '@/components/shared/ClosingCta';
 import { ENQUIRE_PATH } from '@/data/navigation';
 import { useDocumentMeta } from '@/lib/useDocumentMeta';
@@ -17,6 +18,7 @@ export function HomePage() {
   return (
     <>
       <HeroSection />
+      <SkillShowcaseSection />
       <PathwaysSection />
       <ConnectedSection />
       <ProcessSection />
