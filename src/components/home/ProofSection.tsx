@@ -1,4 +1,5 @@
 import { ProofCard } from '@/components/shared/ProofCard';
+import { TESTIMONIALS } from '@/data/testimonials';
 
 export function ProofSection() {
   return (
@@ -9,8 +10,9 @@ export function ProofSection() {
           <h2 className="text-3xl font-bold text-ink-50 md:text-4xl">Words from the businesses we work with.</h2>
         </div>
         <div className="grid gap-6 md:grid-cols-2">
-          <ProofCard client="iiM" />
-          <ProofCard client="supremo" />
+          {TESTIMONIALS.map((testimonial) => (
+            <ProofCard key={testimonial.company} testimonial={testimonial} />
+          ))}
         </div>
       </div>
     </section>

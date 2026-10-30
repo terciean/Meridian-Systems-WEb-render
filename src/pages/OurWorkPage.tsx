@@ -3,6 +3,7 @@ import { ClosingCta } from '@/components/shared/ClosingCta';
 import { PageHero } from '@/components/shared/PageHero';
 import { PageMeta } from '@/components/shared/PageMeta';
 import { ProofCard } from '@/components/shared/ProofCard';
+import { TESTIMONIALS } from '@/data/testimonials';
 import { ENQUIRE_PATH } from '@/data/navigation';
 import { Link } from '@/lib/router';
 
@@ -26,8 +27,9 @@ export function OurWorkPage() {
       />
       <section data-reveal className="px-6 pb-24">
         <div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-2">
-          <ProofCard client="iiM" />
-          <ProofCard client="supremo" />
+          {TESTIMONIALS.map((testimonial) => (
+            <ProofCard key={testimonial.company} testimonial={testimonial} />
+          ))}
         </div>
       </section>
       <ClosingCta
