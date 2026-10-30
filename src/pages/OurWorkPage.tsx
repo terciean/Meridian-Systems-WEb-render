@@ -1,19 +1,18 @@
 import { ArrowRight } from 'lucide-react';
 import { ClosingCta } from '@/components/shared/ClosingCta';
 import { PageHero } from '@/components/shared/PageHero';
+import { PageMeta } from '@/components/shared/PageMeta';
 import { ProofCard } from '@/components/shared/ProofCard';
 import { ENQUIRE_PATH } from '@/data/navigation';
 import { Link } from '@/lib/router';
-import { useDocumentMeta } from '@/lib/useDocumentMeta';
 
 export function OurWorkPage() {
-  useDocumentMeta({
-    title: 'Our Work | Meridian Systems',
-    description: 'See the businesses Meridian Systems works with and the results their lead systems, websites and content are delivering.',
-  });
-
   return (
     <>
+      <PageMeta
+        title="Our Work | Meridian Systems"
+        description="See the businesses Meridian Systems works with and the results their lead systems, websites and content are delivering."
+      />
       <PageHero
         eyebrow="Our work"
         title="Systems built for businesses that want more meetings."

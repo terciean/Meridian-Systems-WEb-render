@@ -16,7 +16,7 @@ export function SiteFooter() {
         </div>
 
         <div>
-          <p className="section-label mb-5">Explore</p>
+          <h2 className="section-label mb-5">Explore</h2>
           <ul className="grid gap-3 text-sm text-ink-200">
             {NAV_ITEMS.map((item) => (
               <li key={item.to}>
@@ -29,7 +29,7 @@ export function SiteFooter() {
         </div>
 
         <div>
-          <p className="section-label mb-5">Start a conversation</p>
+          <h2 className="section-label mb-5">Start a conversation</h2>
           <Link to={ENQUIRE_PATH} className="btn-primary mb-4 w-full md:w-auto">
             Explore Your Business Needs
           </Link>

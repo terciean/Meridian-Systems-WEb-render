@@ -1,19 +1,18 @@
 import { MessageCircle, Phone } from 'lucide-react';
 import { ClosingCta } from '@/components/shared/ClosingCta';
 import { PageHero } from '@/components/shared/PageHero';
+import { PageMeta } from '@/components/shared/PageMeta';
 import { CONTACT } from '@/data/contact';
 import { ENQUIRE_PATH } from '@/data/navigation';
 import { Link } from '@/lib/router';
-import { useDocumentMeta } from '@/lib/useDocumentMeta';
 
 export function ContactPage() {
-  useDocumentMeta({
-    title: 'Contact | Meridian Systems',
-    description: 'Get in touch with Meridian Systems on WhatsApp or through a short questionnaire about your business.',
-  });
-
   return (
     <>
+      <PageMeta
+        title="Contact | Meridian Systems"
+        description="Get in touch with Meridian Systems on WhatsApp or through a short questionnaire about your business."
+      />
       <PageHero
         eyebrow="Contact"
         title="Speak to us directly."

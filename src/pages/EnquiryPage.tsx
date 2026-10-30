@@ -1,7 +1,7 @@
+import { PageMeta } from '@/components/shared/PageMeta';
 import { QuestionnaireForm } from '@/features/enquiry/QuestionnaireForm';
 import { SERVICE_OPTIONS, type Answers } from '@/data/questionnaire';
 import { useLocation } from '@/lib/router';
-import { useDocumentMeta } from '@/lib/useDocumentMeta';
 
 function initialAnswersFromSearch(search: string): Answers {
   const requested = new URLSearchParams(search).get('service');
@@ -11,13 +11,13 @@ function initialAnswersFromSearch(search: string): Answers {
 
 export function EnquiryPage() {
   const { search } = useLocation();
-  useDocumentMeta({
-    title: 'Explore Your Business Needs | Meridian Systems',
-    description: 'A short questionnaire that helps Meridian Systems understand your business and suggest the right starting point.',
-  });
 
   return (
     <section className="px-6 pb-24 pt-36 md:pt-44">
+      <PageMeta
+        title="Explore Your Business Needs | Meridian Systems"
+        description="A short questionnaire that helps Meridian Systems understand your business and suggest the right starting point."
+      />
       <div className="mx-auto mb-14 max-w-3xl space-y-4 text-center">
         <p className="section-label">Explore your business needs</p>
         <h1 className="text-3xl font-bold leading-tight text-ink-50 md:text-5xl">Seven questions, about five minutes.</h1>

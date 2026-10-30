@@ -4,19 +4,17 @@ import { ConnectedSection } from '@/components/home/ConnectedSection';
 import { ProcessSection } from '@/components/home/ProcessSection';
 import { ProofSection } from '@/components/home/ProofSection';
 import { SkillShowcaseSection } from '@/components/home/SkillShowcaseSection';
+import { PageMeta } from '@/components/shared/PageMeta';
 import { ClosingCta } from '@/components/shared/ClosingCta';
 import { ENQUIRE_PATH } from '@/data/navigation';
-import { useDocumentMeta } from '@/lib/useDocumentMeta';
 
 export function HomePage() {
-  useDocumentMeta({
-    title: 'Meridian Systems | CRM and Lead Management South Africa',
-    description:
-      'Meridian Systems builds CRM and lead management systems for South African businesses. Warm leads are followed up automatically, meetings are booked with phone alarms, and websites, stock and content support the whole business.',
-  });
-
   return (
     <>
+      <PageMeta
+        title="Meridian Systems | CRM and Lead Management South Africa"
+        description="Meridian Systems builds CRM and lead management systems for South African businesses. Warm leads are followed up automatically, meetings are booked with phone alarms, and websites, stock and content support the whole business."
+      />
       <HeroSection />
       <SkillShowcaseSection />
       <PathwaysSection />

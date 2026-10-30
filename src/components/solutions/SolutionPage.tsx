@@ -2,8 +2,8 @@ import { ArrowRight, Zap } from 'lucide-react';
 import { Link } from '@/lib/router';
 import { ClosingCta } from '@/components/shared/ClosingCta';
 import { ENQUIRE_PATH } from '@/data/navigation';
+import { PageMeta } from '@/components/shared/PageMeta';
 import { SOLUTION_LIST, type Solution } from '@/data/solutions';
-import { useDocumentMeta } from '@/lib/useDocumentMeta';
 import { MeetingBookingSection } from '@/components/solutions/MeetingBookingSection';
 import { LeadSegmentsSection } from '@/components/solutions/LeadSegmentsSection';
 import { FaqSection } from '@/components/shared/FaqSection';
@@ -13,8 +13,6 @@ function enquireLink(slug: string) {
 }
 
 export function SolutionPage({ solution }: { solution: Solution }) {
-  useDocumentMeta({ title: solution.title, description: solution.description });
-
   const relatedSolutions = SOLUTION_LIST.filter((item) => item.slug !== solution.slug);
 
   const structuredData = {
@@ -40,6 +38,7 @@ export function SolutionPage({ solution }: { solution: Solution }) {
 
   return (
     <div>
+      <PageMeta title={solution.title} description={solution.description} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       <section className="relative overflow-hidden px-6 pb-24 pt-40 md:pt-48">
         <div className="relative mx-auto grid max-w-7xl items-center gap-16 lg:grid-cols-[1.1fr_0.9fr]">
