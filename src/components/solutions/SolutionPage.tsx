@@ -17,8 +17,30 @@ export function SolutionPage({ solution }: { solution: Solution }) {
 
   const relatedSolutions = SOLUTION_LIST.filter((item) => item.slug !== solution.slug);
 
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Service',
+        name: solution.pathwayLabel,
+        description: solution.description,
+        url: `${window.location.origin}${solution.path}`,
+        provider: { '@type': 'Organization', name: 'Meridian Systems' },
+        areaServed: { '@type': 'Country', name: 'South Africa' },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'Home', item: `${window.location.origin}/` },
+          { '@type': 'ListItem', position: 2, name: solution.pathwayLabel, item: `${window.location.origin}${solution.path}` },
+        ],
+      },
+    ],
+  };
+
   return (
     <div>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       <section className="relative overflow-hidden px-6 pb-24 pt-40 md:pt-48">
         <div className="relative mx-auto grid max-w-7xl items-center gap-16 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="space-y-8">

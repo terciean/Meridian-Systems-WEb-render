@@ -37,7 +37,7 @@ export function SkillShowcaseSection() {
         </div>
 
         <div
-          className="skill-stage flex flex-col gap-6 md:block md:h-[560px]"
+          className="skill-stage relative flex flex-col gap-6 md:block md:h-[560px]"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
           onFocus={() => setPaused(true)}

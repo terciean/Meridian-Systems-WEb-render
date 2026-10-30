@@ -29,7 +29,7 @@ export function SiteHeader() {
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-6 px-6">
         <BrandMark />
 
-        <nav aria-label="Main" className="hidden items-center gap-1 lg:flex">
+        <nav aria-label="Main" className="hidden items-center gap-1 xl:flex">
           {NAV_ITEMS.map((item) => {
             const active = pathname === item.to;
             return (
@@ -37,7 +37,7 @@ export function SiteHeader() {
                 key={item.to}
                 to={item.to}
                 aria-current={active ? 'page' : undefined}
-                className={`rounded-full px-3 py-2 text-sm transition duration-200 hover:text-teal-200 ${
+                className={`whitespace-nowrap rounded-full px-3 py-2 text-sm transition duration-200 hover:text-teal-200 ${
                   active ? 'text-teal-200' : 'text-ink-200'
                 }`}
               >
@@ -54,7 +54,7 @@ export function SiteHeader() {
           <button
             type="button"
             onClick={() => setMenuOpen((open) => !open)}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-ink-600 text-ink-100 transition hover:border-teal-400 hover:text-teal-200 lg:hidden"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-ink-600 text-ink-100 transition hover:border-teal-400 hover:text-teal-200 xl:hidden"
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
@@ -65,7 +65,7 @@ export function SiteHeader() {
       </div>
 
       {menuOpen && (
-        <nav id="mobile-menu" aria-label="Mobile" className="border-t border-ink-800 bg-ink-950 px-6 pb-8 pt-4 lg:hidden">
+        <nav id="mobile-menu" aria-label="Mobile" className="border-t border-ink-800 bg-ink-950 px-6 pb-8 pt-4 xl:hidden">
           <ul className="flex flex-col gap-1">
             {NAV_ITEMS.map((item) => (
               <li key={item.to}>
