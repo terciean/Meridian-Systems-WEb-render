@@ -7,7 +7,7 @@ interface PageMetaProps {
   noIndex?: boolean;
 }
 
-const SITE_ORIGIN = 'https://your-domain.com';
+const SITE_ORIGIN = 'https://meridian-systems.onrender.com';
 const SOCIAL_IMAGE = `${SITE_ORIGIN}/Meridian_Systems_Geometric_Logo.png`;
 
 export function PageMeta({ title, description, noIndex = false }: PageMetaProps) {
