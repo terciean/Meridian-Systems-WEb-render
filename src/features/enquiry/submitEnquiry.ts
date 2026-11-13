@@ -1,7 +1,7 @@
 import { SERVICE_OPTIONS, getActiveSteps, type Answers, type AnswerValue, type QuestionField } from '@/data/questionnaire';
 
 const CONTACT_KEYS = ['name', 'email', 'phone'];
-const ENQUIRY_ENDPOINT = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-enquiry`;
+const ENQUIRY_ENDPOINT = '/api/send-enquiry';
 
 function text(answers: Answers, key: string): string {
   const value: AnswerValue | undefined = answers[key];
@@ -35,11 +35,7 @@ export async function submitEnquiry(answers: Answers): Promise<void> {
 
   const response = await fetch(ENQUIRY_ENDPOINT, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Apikey: import.meta.env.VITE_SUPABASE_ANON_KEY,
-      Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       service,
       name: text(answers, 'name'),
