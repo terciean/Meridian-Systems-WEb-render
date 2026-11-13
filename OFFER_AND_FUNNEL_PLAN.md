@@ -72,14 +72,14 @@ Reuse the existing `questionnaire.ts` step engine — it already does exactly th
 Horizontal slide-deck layout, personalized by the route taken in Stage 1. Each deck: **VSL/opener (the pain, keyed to the "biggest challenge" answer from the questionnaire) → dream outcome → mechanism (named system) → value stack → investment (real price from Section 3) → guarantee → closer/CTA to book.** Two-layer personalization carried over from the other project: a top headline driven by the service chosen, a detail subline driven by the specific challenge/answer within that service.
 
 **Stage 3 — Booking + tracking**
-Enquiries go through a Cloudflare Pages Function (`functions/api/send-enquiry.ts`) that emails via Resend — Supabase was removed (it only ran this one function, and its free tier pauses when idle). Leads are not stored in a database yet; the CRM on Railway is the future home for that. Add event tracking at each funnel stage (route chosen, offer page viewed, booking completed) so conversion can actually be measured. **Analytics: Plausible** — lightweight, privacy-friendly, no cookie-consent banner needed, which fits the POPIA-conscious brand story better than Google Analytics' heavier tracking.
+Enquiries go through a Cloudflare Worker (`worker/index.ts` + `worker/enquiry.ts`) that emails via Resend — Supabase was removed (it only ran this one function, and its free tier pauses when idle). Leads are not stored in a database yet; the CRM on Railway is the future home for that. Add event tracking at each funnel stage (route chosen, offer page viewed, booking completed) so conversion can actually be measured. **Analytics: Plausible** — lightweight, privacy-friendly, no cookie-consent banner needed, which fits the POPIA-conscious brand story better than Google Analytics' heavier tracking.
 
 **Booking mechanism — locked in: Calendly.** Embedded as an inline widget (`src/components/shared/CalendlyInlineWidget.tsx`) on the questionnaire's confirmation screen (`src/features/enquiry/EnquiryConfirmation.tsx`) — after someone submits the enquiry, they can immediately grab a time instead of waiting for a reply. URL: `https://calendly.com/ethoscreativesystems/30min`. No Calendly prefill of name/email is wired up yet (the other project's pattern used Calendly's `?name=&email=` query params) — worth adding later if you want to skip re-entering contact details.
 
 ## 7. Design brief notes for Fable 5.2
 
 - **Visual system:** already set in [BRANDING.md](BRANDING.md) — steel blue `#507289`, graphite `#171B20`, slate `#242B33`, silver `#C8CED5`, cool white `#F7FAFD`; Barlow Condensed (display) + Source Sans 3 (body). Do not redecide this, just execute it across new pages.
-- **New components needed:** offer slide-deck (horizontal scroll/swipe, 6–7 panels), extended route-aware questionnaire (6 services + consultation route), value-stack/pricing block with guarantee callout, booking step (Cloudflare Pages Function + Calendly).
+- **New components needed:** offer slide-deck (horizontal scroll/swipe, 6–7 panels), extended route-aware questionnaire (6 services + consultation route), value-stack/pricing block with guarantee callout, booking step (Cloudflare Worker + Calendly).
 - **Reused as-is:** `BrandMark`, `SiteHeader`/`SiteFooter`, `PageMeta`, `ProofCard`/testimonials, `FaqSection`, `MobileCtaBar`.
 - **Existing diff is small and surgical** (84/−86 lines across 15 files) — it's a palette/font/name swap, not a layout rebuild. The funnel work in Section 6 is the actual layout rebuild; brief Fable accordingly so it doesn't scope this as "just restyle what's there."
 
@@ -103,7 +103,7 @@ Enquiries go through a Cloudflare Pages Function (`functions/api/send-enquiry.ts
 2. Commit the existing rebrand diff — still pending, not done automatically
 3. ~~Expand `solutions.ts` to the 6-service menu with the value-stack/guarantee copy~~ — done (`src/data/solutions.ts`)
 4. ~~Extend the questionnaire + build the offer slide-deck page template~~ — done (`src/data/questionnaire.ts`, `src/components/solutions/OfferDeck.tsx`, `src/components/solutions/SolutionPage.tsx`)
-5. ~~Wire the booking/tracking stage~~ — done: Plausible script + SPA pageview tracking (`index.html`, `src/App.tsx`), `route_chosen`/`enquiry_submitted` events (`src/features/enquiry/QuestionnaireForm.tsx`), business email added (`src/data/contact.ts`, footer, structured data); enquiry email via Resend, now served by a Cloudflare Pages Function
+5. ~~Wire the booking/tracking stage~~ — done: Plausible script + SPA pageview tracking (`index.html`, `src/App.tsx`), `route_chosen`/`enquiry_submitted` events (`src/features/enquiry/QuestionnaireForm.tsx`), business email added (`src/data/contact.ts`, footer, structured data); enquiry email via Resend, now served by a Cloudflare Worker
 6. Fable 5.2 takes this doc + `BRANDING.md` and does the persuasive copywriting pass over the structure already built — the architecture, pricing, guarantee and mechanics are real; the opener/outcome/closer language is a first draft, not final persuasive copy
 
 ## 10. What was actually built (for Fable 5.2's context)
@@ -117,7 +117,7 @@ Enquiries go through a Cloudflare Pages Function (`functions/api/send-enquiry.ts
 - `index.html` — added the Plausible `script.manual.js` tag (`data-domain="ethoscreativesystems.com"`), added `email` to the `ContactPoint` structured data.
 - `src/App.tsx` — fires a manual Plausible pageview on every client-side route change (required since `script.manual.js` doesn't auto-track SPA navigation).
 - `src/data/contact.ts`, `src/components/layout/SiteFooter.tsx` — added `admin@ethoscreativesystems.com`, surfaced in the footer.
-- `functions/api/send-enquiry.ts` — enquiry endpoint, ported from the removed Supabase edge function (see CLOUDFLARE_SETUP.md).
+- `worker/index.ts` + `worker/enquiry.ts` — enquiry endpoint, ported from the removed Supabase edge function (see CLOUDFLARE_SETUP.md).
 - `src/components/home/PathwaysSection.tsx` — "Four pathways" → "Six pathways" copy fix.
 - `.claude/launch.json` — added so the dev server can be previewed in-session (`npm run dev --prefix Meridian-Systems-WEb-render`).
 - Verified: `tsc --noEmit` clean, `vite build` clean, manual browser walkthrough of the deck (desktop + mobile), the conditional questionnaire step (8 steps on the core route vs. 7 on others), and the homepage pathway grid. No console errors.

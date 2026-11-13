@@ -120,7 +120,7 @@ function buildEmail(enquiry: EnquiryPayload) {
   };
 }
 
-export const onRequestPost = async ({ request, env }: { request: Request; env: Env }): Promise<Response> => {
+export async function handleEnquiry(request: Request, env: Env): Promise<Response> {
   try {
     const body: unknown = await request.json().catch(() => null);
 
@@ -165,6 +165,7 @@ export const onRequestPost = async ({ request, env }: { request: Request; env: E
     console.error('send-enquiry failed', err);
     return json({ error: 'Something went wrong. Please try again.' }, 500);
   }
-};
+}
 
-export const onRequest = async (): Promise<Response> => json({ error: 'Method not allowed.' }, 405);
+export { json };
+export type { Env };

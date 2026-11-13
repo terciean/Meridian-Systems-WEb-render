@@ -1,4 +1,4 @@
-import { readFile, writeFile, mkdir, rm } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, rm, readdir } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -6,7 +6,12 @@ const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const clientDir = resolve(root, 'dist');
 const serverDir = resolve(root, 'dist-ssr');
 
-const { render, SOLUTION_LIST } = await import(pathToFileURL(resolve(serverDir, 'entry-server.js')).href);
+// The SSR bundle's location can vary by build environment, so find it rather than assume a path.
+const serverFiles = await readdir(serverDir, { recursive: true });
+const entryFile = serverFiles.find((file) => /(^|[\/])entry-server[^\/]*\.js$/.test(file));
+if (!entryFile) throw new Error(`entry-server bundle not found in ${serverDir}`);
+
+const { render, SOLUTION_LIST } = await import(pathToFileURL(resolve(serverDir, entryFile)).href);
 
 const template = await readFile(resolve(clientDir, 'index.html'), 'utf-8');
 
