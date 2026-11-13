@@ -20,15 +20,23 @@ export interface QuestionStep {
   title: string;
   description: string;
   fields: QuestionField[];
+  condition?: (answers: Answers) => boolean;
 }
 
 export const SERVICE_OPTIONS: ChoiceOption[] = [
   { value: 'lead-systems-crm', label: 'Lead Systems & CRM' },
   { value: 'website-design-seo', label: 'Website Design & SEO' },
-  { value: 'stock-systems', label: 'Stock Systems' },
-  { value: 'content-video', label: 'Content & Video' },
+  { value: 'booking-stock-systems', label: 'Booking & Stock Systems' },
+  { value: 'video-production', label: 'Video Production & Editing' },
+  { value: 'social-content', label: 'Social Content' },
+  { value: 'meta-ads', label: 'Meta Ad Setup & Management' },
+  { value: 'consultation', label: 'A paid consultation (R800) — not ready to commit yet' },
   { value: 'not-sure', label: 'Not sure yet' },
 ];
+
+function wantsLeadSystems(answers: Answers): boolean {
+  return answers.service === 'lead-systems-crm';
+}
 
 export const QUESTIONNAIRE_STEPS: QuestionStep[] = [
   {
@@ -100,6 +108,28 @@ export const QUESTIONNAIRE_STEPS: QuestionStep[] = [
     ],
   },
   {
+    title: 'How many meetings do you book today?',
+    description:
+      "This is recorded as your baseline before go-live, so our 90-day guarantee (if your booked-meeting rate doesn't visibly improve, we keep working for free until it does) can be measured honestly.",
+    condition: wantsLeadSystems,
+    fields: [
+      {
+        key: 'currentBookedMeetings',
+        label: 'Meetings booked per month today',
+        kind: 'choice',
+        required: true,
+        maxLength: 60,
+        options: [
+          { value: 'none', label: 'None yet' },
+          { value: 'under-5', label: 'Fewer than 5' },
+          { value: '5-15', label: '5 to 15' },
+          { value: '15-30', label: '15 to 30' },
+          { value: 'over-30', label: 'More than 30' },
+        ],
+      },
+    ],
+  },
+  {
     title: 'What do you use today?',
     description: 'Select everything that applies. This shows us what we can build on.',
     fields: [
@@ -156,6 +186,10 @@ export const QUESTIONNAIRE_STEPS: QuestionStep[] = [
     ],
   },
 ];
+
+export function getActiveSteps(answers: Answers): QuestionStep[] {
+  return QUESTIONNAIRE_STEPS.filter((step) => !step.condition || step.condition(answers));
+}
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_PATTERN = /^[+\d\s()-]{7,}$/;

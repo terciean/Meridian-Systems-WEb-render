@@ -31,9 +31,7 @@ export function SkillShowcaseSection() {
       <div className="mx-auto max-w-7xl">
         <div className="mb-16 max-w-2xl space-y-4">
           <p className="section-label">Proof of skill</p>
-          <h2 className="text-3xl font-bold text-ink-50 md:text-4xl">
-            Four ways we make your business look sharp and work harder.
-          </h2>
+          <h2 className="text-3xl font-bold text-ink-50 md:text-4xl">Ten distinct looks, one team that builds any of them.</h2>
         </div>
 
         <div

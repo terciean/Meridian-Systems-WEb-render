@@ -1,4 +1,4 @@
-import { MessageCircle } from 'lucide-react';
+import { Mail, MessageCircle } from 'lucide-react';
 import { Link } from '@/lib/router';
 import { CONTACT } from '@/data/contact';
 import { ENQUIRE_PATH, NAV_ITEMS } from '@/data/navigation';
@@ -9,7 +9,7 @@ export function SiteFooter() {
     <footer className="border-t border-ink-800 bg-ink-950">
       <div className="mx-auto grid max-w-7xl gap-12 px-6 py-16 md:grid-cols-[1.4fr_1fr_1fr]">
         <div className="space-y-6">
-          <BrandMark />
+          <BrandMark footer />
           <p className="max-w-sm text-sm leading-relaxed text-ink-300">
             Lead systems and CRM tools that turn enquiries into booked meetings, supported by websites, stock systems and content.
           </p>
@@ -42,12 +42,19 @@ export function SiteFooter() {
             <MessageCircle className="h-4 w-4 text-teal-300" aria-hidden="true" />
             WhatsApp {CONTACT.phoneDisplay}
           </a>
+          <a
+            href={`mailto:${CONTACT.email}`}
+            className="mt-3 flex items-center gap-2 text-sm text-ink-200 transition hover:text-teal-200"
+          >
+            <Mail className="h-4 w-4 text-teal-300" aria-hidden="true" />
+            {CONTACT.email}
+          </a>
         </div>
       </div>
 
       <div className="border-t border-ink-800">
         <div className="mx-auto flex max-w-7xl flex-col gap-2 px-6 py-6 text-xs text-ink-400 md:flex-row md:justify-between">
-          <p>© {new Date().getFullYear()} Meridian Systems. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Ethos Creative Systems. All rights reserved.</p>
           <p>Lead systems and CRM, built to connect the whole business.</p>
         </div>
       </div>

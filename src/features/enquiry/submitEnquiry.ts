@@ -1,4 +1,4 @@
-import { SERVICE_OPTIONS, QUESTIONNAIRE_STEPS, type Answers, type AnswerValue, type QuestionField } from '@/data/questionnaire';
+import { SERVICE_OPTIONS, getActiveSteps, type Answers, type AnswerValue, type QuestionField } from '@/data/questionnaire';
 
 const CONTACT_KEYS = ['name', 'email', 'phone'];
 const ENQUIRY_ENDPOINT = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-enquiry`;
@@ -21,7 +21,8 @@ function answerText(field: QuestionField, value: AnswerValue | undefined): strin
 }
 
 function buildFlow(answers: Answers) {
-  return QUESTIONNAIRE_STEPS.flatMap((step) => step.fields)
+  return getActiveSteps(answers)
+    .flatMap((step) => step.fields)
     .filter((field) => !CONTACT_KEYS.includes(field.key))
     .map((field) => ({ question: field.label, answer: answerText(field, answers[field.key]) }))
     .filter((item) => item.answer.length > 0);

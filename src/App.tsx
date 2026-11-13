@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { SiteLayout } from '@/components/layout/SiteLayout';
 import { SolutionPage } from '@/components/solutions/SolutionPage';
 import { SOLUTION_LIST } from '@/data/solutions';
@@ -8,6 +9,7 @@ import { NotFoundPage } from '@/pages/NotFoundPage';
 import { OurWorkPage } from '@/pages/OurWorkPage';
 import { useLocation } from '@/lib/router';
 import { useScrollReveal } from '@/lib/useScrollReveal';
+import { trackPageview } from '@/lib/analytics';
 
 function renderPage(pathname: string) {
   const solution = SOLUTION_LIST.find((item) => item.path === pathname);
@@ -33,6 +35,10 @@ function App() {
   const { pathname } = useLocation();
   const normalizedPath = pathname.length > 1 ? pathname.replace(/\/+$/, '') : pathname;
   useScrollReveal(normalizedPath);
+
+  useEffect(() => {
+    trackPageview(normalizedPath);
+  }, [normalizedPath]);
 
   return <SiteLayout>{renderPage(normalizedPath)}</SiteLayout>;
 }

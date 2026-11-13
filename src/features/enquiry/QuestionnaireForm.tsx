@@ -1,21 +1,32 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { ArrowLeft, ArrowRight, Loader2, Send } from 'lucide-react';
 import { EnquiryConfirmation } from '@/features/enquiry/EnquiryConfirmation';
 import { QuestionField } from '@/features/enquiry/QuestionField';
 import { submitEnquiry } from '@/features/enquiry/submitEnquiry';
-import { QUESTIONNAIRE_STEPS, validateStep, type Answers } from '@/data/questionnaire';
+import { getActiveSteps, validateStep, type Answers, type QuestionField as QuestionFieldConfig } from '@/data/questionnaire';
+import { trackEvent } from '@/lib/analytics';
 
 type SubmitStatus = 'idle' | 'submitting' | 'error' | 'sent';
+const AUTO_ADVANCE_DELAY_MS = 380;
 
 export function QuestionnaireForm({ initialAnswers }: { initialAnswers: Answers }) {
   const [stepIndex, setStepIndex] = useState(0);
   const [answers, setAnswers] = useState<Answers>(initialAnswers);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<SubmitStatus>('idle');
+  const autoAdvanceTimeout = useRef<number | null>(null);
 
-  const step = QUESTIONNAIRE_STEPS[stepIndex];
-  const isLast = stepIndex === QUESTIONNAIRE_STEPS.length - 1;
-  const progress = ((stepIndex + 1) / QUESTIONNAIRE_STEPS.length) * 100;
+  const activeSteps = getActiveSteps(answers);
+  const step = activeSteps[Math.min(stepIndex, activeSteps.length - 1)];
+  const isLast = stepIndex === activeSteps.length - 1;
+  const progress = ((stepIndex + 1) / activeSteps.length) * 100;
+  const isSingleChoiceStep = step.fields.length === 1 && step.fields[0].kind === 'choice';
+
+  useEffect(() => {
+    return () => {
+      if (autoAdvanceTimeout.current !== null) window.clearTimeout(autoAdvanceTimeout.current);
+    };
+  }, []);
 
   if (status === 'sent') {
     return <EnquiryConfirmation name={typeof answers.name === 'string' ? answers.name : ''} />;
@@ -26,7 +37,23 @@ export function QuestionnaireForm({ initialAnswers }: { initialAnswers: Answers 
     setErrors({});
   };
 
+  const handleFieldChange = (field: QuestionFieldConfig, value: Answers[string]) => {
+    updateAnswer(field.key, value);
+
+    if (!isSingleChoiceStep || isLast || typeof value !== 'string') return;
+
+    if (autoAdvanceTimeout.current !== null) window.clearTimeout(autoAdvanceTimeout.current);
+    autoAdvanceTimeout.current = window.setTimeout(() => {
+      if (field.key === 'service') {
+        trackEvent('route_chosen', { service: value });
+      }
+      setErrors({});
+      setStepIndex((index) => index + 1);
+    }, AUTO_ADVANCE_DELAY_MS);
+  };
+
   const goBack = () => {
+    if (autoAdvanceTimeout.current !== null) window.clearTimeout(autoAdvanceTimeout.current);
     setErrors({});
     setStatus('idle');
     setStepIndex((index) => Math.max(0, index - 1));
@@ -35,6 +62,7 @@ export function QuestionnaireForm({ initialAnswers }: { initialAnswers: Answers 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (status === 'submitting') return;
+    if (autoAdvanceTimeout.current !== null) window.clearTimeout(autoAdvanceTimeout.current);
 
     const stepErrors = validateStep(step, answers);
     if (Object.keys(stepErrors).length > 0) {
@@ -43,6 +71,9 @@ export function QuestionnaireForm({ initialAnswers }: { initialAnswers: Answers 
     }
 
     if (!isLast) {
+      if (stepIndex === 0 && typeof answers.service === 'string') {
+        trackEvent('route_chosen', { service: answers.service });
+      }
       setErrors({});
       setStepIndex((index) => index + 1);
       return;
@@ -52,6 +83,7 @@ export function QuestionnaireForm({ initialAnswers }: { initialAnswers: Answers 
     try {
       await submitEnquiry(answers);
       setStatus('sent');
+      trackEvent('enquiry_submitted', { service: typeof answers.service === 'string' ? answers.service : 'unknown' });
     } catch {
       setStatus('error');
     }
@@ -62,11 +94,11 @@ export function QuestionnaireForm({ initialAnswers }: { initialAnswers: Answers 
       <div className="space-y-4">
         <div className="flex items-center justify-between text-sm">
           <span className="font-semibold text-teal-200">
-            Step {stepIndex + 1} of {QUESTIONNAIRE_STEPS.length}
+            Step {stepIndex + 1} of {activeSteps.length}
           </span>
           <span className="text-ink-400">{Math.round(progress)}% complete</span>
         </div>
-        <div className="h-1.5 w-full overflow-hidden rounded-full bg-ink-800" role="progressbar" aria-valuemin={1} aria-valuemax={QUESTIONNAIRE_STEPS.length} aria-valuenow={stepIndex + 1}>
+        <div className="h-1.5 w-full overflow-hidden rounded-full bg-ink-800" role="progressbar" aria-valuemin={1} aria-valuemax={activeSteps.length} aria-valuenow={stepIndex + 1}>
           <div
             className="h-full rounded-full bg-gradient-to-r from-teal-400 to-teal-200 shadow-glow-teal transition-all duration-500"
             style={{ width: `${progress}%` }}
@@ -87,7 +119,7 @@ export function QuestionnaireForm({ initialAnswers }: { initialAnswers: Answers 
               field={field}
               value={answers[field.key]}
               error={errors[field.key]}
-              onChange={(value) => updateAnswer(field.key, value)}
+              onChange={(value) => handleFieldChange(field, value)}
             />
           ))}
         </div>

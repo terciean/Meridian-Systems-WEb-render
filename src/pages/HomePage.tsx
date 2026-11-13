@@ -12,8 +12,8 @@ export function HomePage() {
   return (
     <>
       <PageMeta
-        title="Meridian Systems | CRM and Lead Management South Africa"
-        description="Meridian Systems builds CRM and lead management systems for South African businesses. Warm leads are followed up automatically, meetings are booked with phone alarms, and websites, stock and content support the whole business."
+        title="Ethos Creative Systems | CRM and Lead Management South Africa"
+        description="Ethos Creative Systems builds CRM and lead management systems for South African businesses. Warm leads are followed up automatically, meetings are booked with phone alarms, and websites, stock and content support the whole business."
       />
       <HeroSection />
       <SkillShowcaseSection />

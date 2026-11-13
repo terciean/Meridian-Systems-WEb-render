@@ -31,7 +31,7 @@ export function PathwaysSection() {
       <div className="mx-auto max-w-7xl">
         <div className="mb-16 max-w-2xl space-y-4">
           <p className="section-label">Where would you like to start?</p>
-          <h2 className="text-3xl font-bold text-ink-50 md:text-4xl">Four pathways, one connected system.</h2>
+          <h2 className="text-3xl font-bold text-ink-50 md:text-4xl">Six pathways, one connected system.</h2>
           <p className="leading-relaxed text-ink-300">Start with the part of your business that needs attention most. Each pathway feeds the others.</p>
         </div>
         <div className="grid gap-6 lg:grid-cols-3">

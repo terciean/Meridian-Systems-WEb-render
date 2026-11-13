@@ -54,7 +54,7 @@ export function HeroSection() {
             Turn every enquiry into a <span className="text-teal-300 text-neon">booked meeting.</span>
           </h1>
           <p className="reveal max-w-xl text-lg leading-relaxed text-ink-300">
-            Meridian Systems is a CRM and lead management system for South African businesses. It captures, follows up and books every lead, with supporting websites, stock systems and content that keep the whole business moving.
+            Ethos Creative Systems is a CRM and lead management system for South African businesses. It captures, follows up and books every lead, with supporting websites, stock systems and content that keep the whole business moving.
           </p>
           <div className="reveal flex flex-wrap items-center gap-4">
             <Link to={ENQUIRE_PATH} className="btn-primary">

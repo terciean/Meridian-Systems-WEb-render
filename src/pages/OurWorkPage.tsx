@@ -11,8 +11,8 @@ export function OurWorkPage() {
   return (
     <>
       <PageMeta
-        title="Our Work | Meridian Systems"
-        description="See the businesses Meridian Systems works with and the results their lead systems, websites and content are delivering."
+        title="Our Work | Ethos Creative Systems"
+        description="See the businesses Ethos Creative Systems works with and the results their lead systems, websites and content are delivering."
       />
       <PageHero
         eyebrow="Our work"

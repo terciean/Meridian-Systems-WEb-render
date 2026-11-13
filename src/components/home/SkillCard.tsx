@@ -1,5 +1,10 @@
 import { useRef, type CSSProperties, type MouseEvent } from 'react';
 import type { SkillShowcaseItem, SkillVariant } from '@/data/skillShowcase';
+import { SkillAnimation } from '@/components/home/SkillAnimations';
+
+function slugify(title: string): string {
+  return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+}
 
 export type CardPosition = 'active' | 'next' | 'prev' | 'far';
 
@@ -13,29 +18,29 @@ interface SkillCardProps {
 const FRAME_CLASS: Record<SkillVariant, string> = {
   mesh: 'border border-white/25 bg-white/10 shadow-[0_24px_60px_-24px_rgba(0,0,0,0.7)]',
   halftone: 'border border-teal-300/30 bg-white/10 shadow-[0_24px_60px_-24px_rgba(0,0,0,0.7)]',
-  deco: 'border-2 border-warning-500/70 bg-white/10 shadow-[0_24px_60px_-24px_rgba(0,0,0,0.7)]',
+  deco: 'border-2 border-teal-400/70 bg-white/10 shadow-[0_24px_60px_-24px_rgba(0,0,0,0.7)]',
   brutal:
-    'border-4 border-ink-950 bg-white/10 shadow-[10px_10px_0_0_#09121B] hover:shadow-[4px_4px_0_0_#09121B]',
+    'border-4 border-ink-950 bg-white/10 shadow-[10px_10px_0_0_#C8CED5] hover:shadow-[4px_4px_0_0_#C8CED5]',
 };
 
 const SURFACE_STYLE: Record<SkillVariant, CSSProperties> = {
   mesh: {
     backgroundImage:
-      'radial-gradient(at 15% 18%, #5B8987 0px, transparent 55%), radial-gradient(at 88% 14%, #D9A441 0px, transparent 50%), radial-gradient(at 72% 84%, #A41D03 0px, transparent 55%), radial-gradient(at 18% 92%, #466C6A 0px, transparent 52%), linear-gradient(#0D1A25, #0D1A25)',
+      'radial-gradient(at 15% 18%, #B3C3CF 0px, transparent 55%), radial-gradient(at 88% 14%, #9EAFC0 0px, transparent 50%), radial-gradient(at 72% 84%, #96ABBC 0px, transparent 55%), radial-gradient(at 18% 92%, #BCCAD4 0px, transparent 52%), linear-gradient(#F1F3F5, #F1F3F5)',
   },
   halftone: {
-    backgroundColor: '#112231',
+    backgroundColor: '#E8EDF1',
     backgroundImage:
-      'linear-gradient(180deg, #112231 0%, transparent 30%, transparent 55%, #112231 92%), radial-gradient(circle, rgba(149,190,187,0.85) 1.2px, transparent 1.9px)',
+      'linear-gradient(180deg, #E8EDF1 0%, transparent 30%, transparent 55%, #E8EDF1 92%), radial-gradient(circle, rgba(80,114,137,0.45) 1.2px, transparent 1.9px)',
     backgroundSize: '100% 100%, 9px 9px',
   },
   deco: {
     backgroundImage:
-      'repeating-linear-gradient(45deg, rgba(217,164,65,0.14) 0 2px, transparent 2px 14px), linear-gradient(#09121B, #09121B)',
-    boxShadow: 'inset 0 0 0 6px #09121B, inset 0 0 0 7px #D9A441',
+      'repeating-linear-gradient(45deg, rgba(80,114,137,0.15) 0 2px, transparent 2px 14px), linear-gradient(#C8CED5, #C8CED5)',
+    boxShadow: 'inset 0 0 0 6px #C8CED5, inset 0 0 0 7px #9EAFC0',
   },
   brutal: {
-    backgroundColor: '#E8452A',
+    backgroundColor: '#D6E1E9',
   },
 };
 
@@ -46,24 +51,17 @@ const SURFACE_OPACITY_CLASS: Record<SkillVariant, string> = {
   brutal: 'opacity-90',
 };
 
-const ASCII_CLASS: Record<SkillVariant, string> = {
-  mesh: 'text-teal-100',
-  halftone: 'text-teal-200',
-  deco: 'text-warning-500',
-  brutal: 'font-bold text-ink-950',
-};
-
 const LABEL_CLASS: Record<SkillVariant, string> = {
   mesh: 'text-teal-200',
   halftone: 'text-teal-300',
-  deco: 'font-display uppercase tracking-[0.25em] text-warning-500',
-  brutal: 'border-2 border-ink-950 bg-ink-950 text-ember-100',
+  deco: 'font-display uppercase tracking-[0.25em] text-teal-200',
+  brutal: 'border-2 border-ink-950 bg-ink-950 text-teal-200',
 };
 
 const GLASS_PANEL_CLASS: Record<SkillVariant, string> = {
   mesh: 'border border-white/20 bg-ink-950/45 backdrop-blur-xl',
   halftone: 'border border-white/15 bg-ink-950/55 backdrop-blur-md',
-  deco: 'border border-warning-500/40 bg-ink-950/65 backdrop-blur-md',
+  deco: 'border border-teal-400/40 bg-ink-950/65 backdrop-blur-md',
   brutal: 'border-4 border-ink-950 bg-ink-950',
 };
 
@@ -73,6 +71,7 @@ export function SkillCard({ skill, index, position, onSelect }: SkillCardProps) 
   const tiltRef = useRef<HTMLDivElement>(null);
   const isActive = position === 'active';
   const labelNumber = String(index + 1).padStart(2, '0');
+  const animationSlot = slugify(skill.title);
 
   function handlePointerMove(event: MouseEvent<HTMLDivElement>) {
     const el = tiltRef.current;
@@ -122,13 +121,14 @@ export function SkillCard({ skill, index, position, onSelect }: SkillCardProps) 
           </span>
         </div>
 
-        <div className="relative flex flex-1 items-center justify-center px-4">
-          <pre
+        <div className="relative flex flex-1 items-center justify-center px-10 py-6">
+          <div
+            data-animation-slot={animationSlot}
             aria-hidden="true"
-            className={`whitespace-pre font-mono text-[11px] leading-[1.35] transition-transform duration-500 ease-out group-hover:scale-105 sm:text-xs ${ASCII_CLASS[skill.variant]}`}
+            className="flex h-48 w-48 shrink-0 items-center justify-center transition-transform duration-500 ease-out group-hover:scale-105"
           >
-            {skill.ascii}
-          </pre>
+            <SkillAnimation slot={animationSlot} />
+          </div>
         </div>
 
         <div

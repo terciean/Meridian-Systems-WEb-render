@@ -5,7 +5,7 @@ const corsHeaders = {
 };
 
 const RECIPIENT = "unknowntsn062@gmail.com";
-const SENDER = "Meridian Systems <onboarding@resend.dev>";
+const SENDER = "Ethos Creative Systems <onboarding@resend.dev>";
 const MAX_FLOW_ITEMS = 30;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 

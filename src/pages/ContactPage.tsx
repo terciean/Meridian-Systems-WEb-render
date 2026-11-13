@@ -10,8 +10,8 @@ export function ContactPage() {
   return (
     <>
       <PageMeta
-        title="Contact | Meridian Systems"
-        description="Get in touch with Meridian Systems on WhatsApp or through a short questionnaire about your business."
+        title="Contact | Ethos Creative Systems"
+        description="Get in touch with Ethos Creative Systems on WhatsApp or through a short questionnaire about your business."
       />
       <PageHero
         eyebrow="Contact"
