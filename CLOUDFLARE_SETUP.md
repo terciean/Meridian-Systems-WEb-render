@@ -33,7 +33,7 @@ Your mailboxes (`admin@ethoscreativesystems.com`) run on HostAfrica and depend o
 6. Send a test email to and from `admin@ethoscreativesystems.com` once propagation completes.
 
 ## 5. After the domain is live
-Switch `SITE_ORIGIN` in `src/lib/site.ts`, plus `public/sitemap.xml`, `public/robots.txt` and the JSON-LD in `index.html`, from the old onrender.com address to `https://ethoscreativesystems.com`. Then re-verify the site in Google Search Console and Bing Webmaster Tools.
+Done: `SITE_ORIGIN`, `sitemap.xml`, `robots.txt` and the JSON-LD now use `https://ethoscreativesystems.com`. Still to do: add the `www` custom domain, then verify the site in Google Search Console and Bing Webmaster Tools and submit the sitemap.
 
 ## 6. Optional: send enquiries from your own domain
 Enquiry emails currently go out from `onboarding@resend.dev` to your personal Gmail. To send from your own domain, add it in Resend, add the SPF/DKIM records it lists to Cloudflare DNS, then change `SENDER` (and `RECIPIENT` if wanted) in `worker/enquiry.ts`.
